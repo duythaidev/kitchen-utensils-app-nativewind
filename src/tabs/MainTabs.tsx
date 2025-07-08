@@ -29,7 +29,21 @@ const TabBarIcon = ({ focused, icon, className }: { focused: boolean; icon: any,
 );
 
 export default function MainTabs() {
+    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
+    useEffect(() => {
+        const checkUser = async () => {
+            const user = await AsyncStorage.getItem('user');
+            if (user) {
+                console.log("user: ", user)
+                console.log("Profile can be accessed: ")
+            } else {
+                console.log("Profile cannot be accessed: ")
+                navigation.navigate('Login');
+            }
+        };
+        checkUser();
+    }, []);
     return (
         <Tab.Navigator initialRouteName='HomeScreen'
             screenOptions={{

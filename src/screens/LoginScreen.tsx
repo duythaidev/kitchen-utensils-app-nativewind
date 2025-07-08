@@ -47,12 +47,13 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  
   const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert('Please enter email and password');
       return;
     }
-
     setIsSubmitting(true);
     try {
       const data = await login(email, password);
@@ -62,7 +63,7 @@ const LoginScreen = () => {
       navigation.navigate('Home');
     } catch (error: any) {
       console.log(error)
-      Alert.alert('Login Failed', 'ajksdhad' + error.message);
+      Alert.alert('Login Failed', 'Error ' + error.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -77,7 +78,7 @@ const LoginScreen = () => {
   useEffect(() => {
     const fetchData = async () => {
       const user = await AsyncStorage.getItem('user');
-      console.log("user saved: ", JSON.parse(user || '{}'))
+      console.log("user login page: ", JSON.parse(user || '{}'))
     };
     fetchData();
   }, []);
