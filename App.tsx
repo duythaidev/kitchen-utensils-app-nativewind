@@ -14,6 +14,8 @@ import { getUserProfile } from './src/api/user';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from './src/screens/OnboardingScreen';
 
+
+
 export type RouteStackParamList = {
   Onboarding: undefined;
   GetStarted: undefined;

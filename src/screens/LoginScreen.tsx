@@ -20,11 +20,27 @@ import { getUserProfile, login } from '../api/user';
 import { FormInput } from '../components/FormInput';
 
 
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  isErrorWithCode,
+  isSuccessResponse,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
+
+
+GoogleSignin.configure({
+  webClientId: '1050346898312-e5kcscnl4cv0o9bs721b29siglqc27vq.apps.googleusercontent.com', // client ID of type WEB for your server. Required to get the `idToken` on the user object, and for offline access.
+  iosClientId: '1050346898312-9hq8c213v6034fthnsdu8og6m9k6ahef.apps.googleusercontent.com', // [iOS] if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
+  profileImageSize: 120, // [iOS] The desired height (and width) of the profile image. Defaults to 120px
+});
 type RootStackParamList = {
   ForgotPassword: undefined;
   Signup: undefined;
   Home: undefined;
 };
+
+
 
 type ContinueWithType = {
   image: any;
@@ -47,7 +63,39 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
+  const [userInfo, setUserInfo] = useState<any>(null);
+  console.log("userInfo", userInfo)
+  const signIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const response = await GoogleSignin.signIn();
+      if (isSuccessResponse(response)) {
+        setUserInfo(response.data);
+      } else {
+        // sign in was cancelled by user
+        console.log("sign in was cancelled by user")
+      }
+    } catch (error) {
+      console.log("error", error)
+      if (isErrorWithCode(error)) {
+        switch (error.code) {
+          case statusCodes.IN_PROGRESS:
+            // operation (eg. sign in) already in progress
+            console.log("operation (eg. sign in) already in progress")
+            break;
+          case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+            // Android only, play services not available or outdated
+            console.log("Android only, play services not available or outdated")
+            break;
+          default:
+          // some other error happened
+        }
+      } else {
+        // an error that's not related to google sign in occurred
+        console.log("an error that's not related to google sign in occurred")
+      }
+    }
+  };
   
   const handleLogin = async () => {
     if (!email || !password) {
