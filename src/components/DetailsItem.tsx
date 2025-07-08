@@ -1,7 +1,7 @@
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useState} from 'react';
-import {Text, TextInput, TouchableOpacity, View} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import React, { useState } from 'react';
+import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 interface DetailsItemProps {
   title: string;
   placeholder: string;
@@ -10,9 +10,9 @@ type RootStackParamList = {
   ForgotPassword: undefined;
   Signup: undefined;
 };
-const DetailsItem: React.FC<DetailsItemProps> = ({title, placeholder}) => {
+const DetailsItem: React.FC<DetailsItemProps> = ({ title, placeholder }) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  
+
   const [changes, setChanges] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const handleForgotPassword = () => {
@@ -33,7 +33,7 @@ const DetailsItem: React.FC<DetailsItemProps> = ({title, placeholder}) => {
         />
         {title === 'Password' && (
           <TouchableOpacity onPress={handleForgotPassword}>
-            <Text className="text-red-600 text-lg font-medium self-end">
+            <Text className="text-blue-600 text-lg font-medium self-end">
               Forgot Password?
             </Text>
           </TouchableOpacity>

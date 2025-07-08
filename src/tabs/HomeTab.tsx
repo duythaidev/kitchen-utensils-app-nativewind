@@ -7,14 +7,14 @@ import {
   ScrollView,
   ImageSourcePropType,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {icons, images} from '../constants';
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {CustomSearch, ProductItem} from '../components';
-import {CategoriesData, ProductData} from '../constants/data';
-import {removeItem} from '../utils/AsyncStorage';
-import {ProductTypes} from '../constants/types';
+import React, { useEffect, useState } from 'react';
+import { icons, images } from '../constants';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CustomSearch, ProductItem } from '../components';
+import { CategoriesData, ProductData } from '../constants/data';
+import { removeItem } from '../utils/AsyncStorage';
+import { ProductTypes } from '../constants/types';
 
 type Props = {};
 
@@ -46,22 +46,22 @@ const HomeTab = (props: Props) => {
     navigation.navigate('Setting');
     await removeItem('onboarded'); // will reset to onboarding
   };
-  const handleSelectCategory = () => {};
+  const handleSelectCategory = () => { };
   return (
     <ScrollView>
       {/* header */}
       <View className="flex flex-row items-center justify-between mx-5">
-        <Image source={icons.menu} className="w-8 h-8" resizeMode="contain" />
+        <Image source={icons.menu} className="w-10 h-10" resizeMode="contain" />
 
         <Image
           source={images.logo}
-          className="w-24 h-24"
           resizeMode="contain"
+          style={{ width: 75, height: 75 }}
         />
         <TouchableOpacity onPress={NavigateToProfile}>
           <Image
             source={icons.profile}
-            className="w-8 h-8"
+            className="w-10 h-10"
             resizeMode="contain"
           />
         </TouchableOpacity>
@@ -90,10 +90,10 @@ const HomeTab = (props: Props) => {
       <View>
         <FlatList
           data={CategoriesData}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <TouchableOpacity onPress={handleSelectCategory}>
               <Image
-                source={{uri: item.image}} // it's url
+                source={{ uri: item.image }} // it's url
                 className="w-24 h-24 rounded-full"
               />
               <Text className="text-black-100/80 text-center text-lg font-medium">
@@ -118,7 +118,7 @@ const HomeTab = (props: Props) => {
         />
       </View>
       {/* daily .. */}
-      <View className="bg-[#4392F9] rounded-xl justify-between flex flex-row mx-5 pl-5 py-5">
+      <View className="bg-blue-500 rounded-xl justify-between flex flex-row mx-5 pl-5 py-5">
         <View>
           <Text className="text-white  text-2xl font-semibold">
             Daily of the Day
@@ -148,7 +148,7 @@ const HomeTab = (props: Props) => {
       <View className="my-8">
         <FlatList
           data={products}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <ProductItem
               image={item.image[0]}
               title={item.title}
@@ -193,7 +193,7 @@ const HomeTab = (props: Props) => {
         />
       </View>
       {/* Trending Products */}
-      <View className="bg-red-500 rounded-xl justify-between flex flex-row mx-5 pl-5 py-5">
+      <View className="bg-blue-500 rounded-xl justify-between flex flex-row mx-5 pl-5 py-5">
         <View>
           <Text className="text-white  text-2xl font-semibold">
             Daily of the Day
@@ -223,7 +223,7 @@ const HomeTab = (props: Props) => {
       <View className="my-8">
         <FlatList
           data={products}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <ProductItem
               image={item.image[0]}
               title={item.title}

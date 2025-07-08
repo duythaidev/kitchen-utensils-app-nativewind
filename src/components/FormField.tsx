@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
   Easing,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {icons} from '../constants';
+import React, { useEffect, useState } from 'react';
+import { icons } from '../constants';
 
 type FormFieldProps = {
   title: string;
@@ -78,9 +78,8 @@ const FormField: React.FC<FormFieldProps> = ({
           ],
         }}
         // let's continue styling it:)
-        className={`flex flex-row items-center justify-center rounded-xl w-full h-[72px] px-4 bg-[#F3F3F3] border-2 border-[#A8A8A9] focus:border-black-200 ${
-          error ? 'border border-red-600  ' : ''
-        } `}>
+        className={`flex flex-row items-center justify-center rounded-xl w-full h-[72px] px-4 bg-[#F3F3F3] border-2 border-[#A8A8A9] focus:border-black-200 ${error ? 'border border-blue-600  ' : ''
+          } `}>
         {/* icon => user icon, or password, or email... */}
         <Image
           source={getIconSource()}
@@ -114,7 +113,7 @@ const FormField: React.FC<FormFieldProps> = ({
       {/* display the error here if there... */}
       {error && (
         <Animated.View
-          className={` text-red-500 font-pregular text-sm mt-3 self-center `}>
+          className={` text-blue-500 font-pregular text-sm mt-3 self-center `}>
           {error}
         </Animated.View>
       )}

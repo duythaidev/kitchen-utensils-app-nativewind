@@ -1,9 +1,14 @@
-import React from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {HomeTab, WishlistTab, CartTab, SearchTab, SettingTab} from '../tabs';
-import {Image, Text, View} from 'react-native';
-import {icons} from '../constants';
+import React, { useEffect, useState } from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { HomeTab, WishlistTab, CartTab, SearchTab, SettingTab } from '../tabs';
+import { Image, Text, View } from 'react-native';
+import { icons } from '../constants';
 import { ItemDetails } from '../constants/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getUserProfile } from '../api/user';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from './OnboardingScreen';
 
 type TabBarItemProps = {
   source: any; // Adjust type according to your image sources
@@ -11,37 +16,43 @@ type TabBarItemProps = {
   cart?: boolean;
   name?: string;
 };
-export const TabBarItem: React.FC<TabBarItemProps> = ({
-  source,
-  focused,
-  cart,
-  name, 
-}) => {
+export const TabBarItem: React.FC<TabBarItemProps> = ({ source, focused, cart, name, }) => {
   return (
-    <View
-      style={{
+    <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: cart ? -10 : 18, }}>
+      {cart && (
+          <View
+            style={{
+              position: 'absolute',
+              top: -8,
+              width: 64,
+              height: 64,
+              borderRadius: 32,
+              backgroundColor: '#000',
+              opacity: 0.05,
+              zIndex: -2,
+            }}
+          />
+        )}
+      
+      <View style={{
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: cart ? -10 : 18,
+        width: cart ? 64 : 'auto',
+        height: cart ? 64 : 'auto',
+        borderRadius: cart ? 32 : 0,
+        backgroundColor: focused ? (cart ? '#2b6cb0' : 'white') : 'white',
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 2},
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        // Android
+        elevation: cart ? 2 : 0,
       }}>
-      <View
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: cart ? 64 : 'auto',
-          height: cart ? 64 : 'auto',
-          borderRadius: cart ? 32 : 0,
-          backgroundColor: focused ? (cart ? 'red' : 'white') : 'white',
-          shadowColor: '#000',
-          shadowOffset: {width: 0, height: 2},
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-          elevation: cart ? 5 : 0,
-        }}>
-        <Image
-          source={source}
+        
+        <Image source={source}
           style={{
-            tintColor: focused ? (cart ? 'white' : 'red') : 'black',
+            tintColor: focused ? (cart ? 'white' : '#2b6cb0') : 'black',
             width: 28,
             height: 28,
           }}
@@ -50,7 +61,7 @@ export const TabBarItem: React.FC<TabBarItemProps> = ({
       {!cart && (
         <Text
           className="font-pthin text-base"
-          style={{color: focused ? 'red' : 'black', fontSize: 12}}>
+          style={{ color: focused ? '#2b6cb0' : 'black', fontSize: 12 }}>
           {name}
         </Text>
       )}
@@ -61,13 +72,54 @@ type Props = {};
 export type RouteTabsParamList = {
   Home: undefined;
   Wishlist: undefined;
-  Cart: {itemDetails: ItemDetails}  | undefined;
-  Search: {query: string} | undefined;
+  Cart: { itemDetails: ItemDetails } | undefined;
+  Search: { query: string } | undefined;
   Setting: undefined;
 };
 const HomeScreen = (props: Props) => {
   const Tab = createBottomTabNavigator<RouteTabsParamList>();
+  // const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
+  // useEffect(() => {
+  //     // fetch data
+  //     const fetchData = async () => {
+  //         try {
+  //             const data = await getUserProfile();
+  //             console.log("profile: ", data)
+  //             if (data) {
+  //                 const user = await AsyncStorage.getItem('user');
+  //                 const userData = JSON.parse(user || '{}');
+  //                 console.log('data', userData)
+  //                 setIsAuthenticated(data !== null);
+  //             } else {
+  //                 setIsAuthenticated(false);
+  //                 navigation.navigate('Login');
+  //             }
+  //         } catch (error) {
+  //             setIsAuthenticated(false);
+  //             navigation.navigate('Login');
+  //         }
+  //     };
+  //     fetchData();
+  // }, []);
+  // console.log("isAuthenticated: ", isAuthenticated) 
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const user = await AsyncStorage.getItem('user');
+      if (user) {
+        console.log("user: ", user)
+        console.log("Profile can be accessed: ")
+        // setIsAuthenticated(true);
+      } else {
+        console.log("Profile cannot be accessed: ")
+        // setIsAuthenticated(false);
+        navigation.navigate('Login');
+      }
+    };
+    checkUser();
+  }, []);
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -79,7 +131,7 @@ const HomeScreen = (props: Props) => {
           height: 70,
           borderTopWidth: 0.2,
           shadowColor: '#000',
-          shadowOffset: {width: 0, height: 2},
+          shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.25,
           shadowRadius: 3.84,
           elevation: 5,
@@ -96,7 +148,7 @@ const HomeScreen = (props: Props) => {
         component={HomeTab}
         options={{
           tabBarLabel: '',
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <TabBarItem source={icons.home} focused={focused} name="Home" />
           ),
         }}
@@ -106,7 +158,7 @@ const HomeScreen = (props: Props) => {
         component={WishlistTab}
         options={{
           tabBarLabel: '',
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <TabBarItem
               source={icons.heart}
               focused={focused}
@@ -121,7 +173,7 @@ const HomeScreen = (props: Props) => {
         component={CartTab}
         options={{
           tabBarLabel: '',
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <TabBarItem
               source={icons.cart}
               focused={focused}
@@ -137,7 +189,7 @@ const HomeScreen = (props: Props) => {
         component={SearchTab}
         options={{
           tabBarLabel: '',
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <TabBarItem source={icons.search} focused={focused} name="Search" />
           ),
         }}
@@ -147,7 +199,7 @@ const HomeScreen = (props: Props) => {
         component={SettingTab}
         options={{
           tabBarLabel: '',
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <TabBarItem
               source={icons.setting}
               focused={focused}

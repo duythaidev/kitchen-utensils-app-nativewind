@@ -1,5 +1,5 @@
-import {RouteProp, useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { RouteProp, useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import {
   FlatList,
@@ -10,14 +10,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {AirbnbRating} from 'react-native-ratings';
-import {RouteStackParamList} from '../../App';
-import {icons} from '../constants';
-import {RouteTabsParamList} from './HomeScreen';
+import { AirbnbRating } from 'react-native-ratings';
+import { RouteStackParamList } from '../../App';
+import { icons } from '../constants';
+import { RouteTabsParamList } from './HomeScreen';
 import LinearGradient from 'react-native-linear-gradient';
-import {FeaturesData} from '../tabs/HomeTab';
-import {ProductItem} from '../components';
-import {ProductData} from '../constants/data';
+import { FeaturesData } from '../tabs/HomeTab';
+import { ProductItem } from '../components';
+import { ProductData } from '../constants/data';
 
 type ScreenRouteProps = RouteProp<RouteStackParamList, 'ProductDetails'>;
 
@@ -25,8 +25,8 @@ type ProductDetailsProps = {
   route: ScreenRouteProps;
 };
 
-const ProductsDetailsScreen: React.FC<ProductDetailsProps> = ({route}) => {
-  const {itemDetails} = route.params || {};
+const ProductsDetailsScreen: React.FC<ProductDetailsProps> = ({ route }) => {
+  const { itemDetails } = route.params || {};
   const navigation =
     useNavigation<StackNavigationProp<RouteTabsParamList, 'Cart'>>();
 
@@ -34,7 +34,7 @@ const ProductsDetailsScreen: React.FC<ProductDetailsProps> = ({route}) => {
     navigation.goBack();
   };
   const NavigateToCart = () => {
-    navigation.navigate('Cart', {itemDetails: itemDetails!});
+    navigation.navigate('Cart', { itemDetails: itemDetails! });
   };
   return (
     <ScrollView className="pt-5 px-3">
@@ -54,7 +54,7 @@ const ProductsDetailsScreen: React.FC<ProductDetailsProps> = ({route}) => {
       {/* image slider */}
       <View className="mt-5">
         <Image
-          source={{uri: itemDetails?.image[0]}}
+          source={{ uri: itemDetails?.image[0] }}
           className=" h-72 rounded-2xl"
         />
       </View>
@@ -65,7 +65,7 @@ const ProductsDetailsScreen: React.FC<ProductDetailsProps> = ({route}) => {
           {sizeData.map(item => (
             <View
               key={item.id}
-              className="bg-transparent py-1 px-2 rounded-lg border border-red-500">
+              className="bg-transparent py-1 px-2 rounded-lg border border-blue-500">
               <Text className="text-action text-xl font-medium">
                 {item.size} uk{' '}
               </Text>
@@ -90,7 +90,7 @@ const ProductsDetailsScreen: React.FC<ProductDetailsProps> = ({route}) => {
               reviews={['Terrible', 'Bad', 'Okay', 'Good', 'Great']}
               defaultRating={itemDetails?.stars}
               size={20}
-              ratingContainerStyle={{flex: 1, flexDirection: 'row'}}
+              ratingContainerStyle={{ flex: 1, flexDirection: 'row' }}
             />
           </View>
 
@@ -125,7 +125,7 @@ const ProductsDetailsScreen: React.FC<ProductDetailsProps> = ({route}) => {
         <View className="flex flex-row items-center gap-x-3  mt-5">
           <FlatList
             data={StatusData}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <View className="bg-transparent py-1 px-2 border flex flex-row gap-x-1 rounded-lg border-neutral-500">
                 <Image
                   className="w-6 h-6"
@@ -177,7 +177,7 @@ const ProductsDetailsScreen: React.FC<ProductDetailsProps> = ({route}) => {
           </View>
         </View>
         {/* delivery in ... */}
-        <View className="bg-red-300 px-3 py-3 my-5">
+        <View className="bg-blue-300 px-3 py-3 my-5">
           <Text className="text-black-100 text-lg ">Delivery in </Text>
           <Text className="text-black-100 text-2xl font-bold ">
             1 within Hour
@@ -187,7 +187,7 @@ const ProductsDetailsScreen: React.FC<ProductDetailsProps> = ({route}) => {
         <View className="flex flex-row items-center justify-between mb-8">
           <FlatList
             data={similarData}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <View className="bg-white py-3 px-3 rounded-lg border border-neutral-200 flex flex-row gap-x-2">
                 <Image
                   source={item.icon}
@@ -233,7 +233,7 @@ const ProductsDetailsScreen: React.FC<ProductDetailsProps> = ({route}) => {
         <View className="my-8">
           <FlatList
             data={itemDetails ? [itemDetails] : []}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <ProductItem
                 image={item.image[0]}
                 title={item.title}

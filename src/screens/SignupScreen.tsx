@@ -1,160 +1,163 @@
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
-  Image,
-  ImageSourcePropType,
+  View,
   Text,
   TouchableOpacity,
-  View,
+  TextInput,
+  Image,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
-import {CustomButton, FormField} from '../components';
-import {icons} from '../constants';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from '@react-native-vector-icons/lucide';
+import { icons } from '../constants';
+import { FormInput } from '../components/FormInput';
+import { register } from '../api/user';
 
-type Props = {};
-// let's go with get started first
-const SignupScreen = (props: Props) => {
+type RootStackParamList = {
+  Login: undefined;
+  ForgotPassword: undefined;
+  HomeScreen: undefined;
+};
+
+
+const ContinueWithData = [
+  {
+    id: 0,
+    name: 'google',
+    image: icons.google,
+  },
+];
+
+const SignupScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     email: '',
     username: '',
     password: '',
     confirmPassword: '',
   });
-  type RootStackParamList = {
-    ForgotPassword: undefined;
-    Login: undefined;
-  };
-  const handleForgotPassword = () => {
-    navigation.navigate('ForgotPassword');
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSignup = async () => {
+    const { email, username, password, confirmPassword } = form;
+
+    if (!email || !username || !password || !confirmPassword) {
+      Alert.alert('Please fill in all fields');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert('Password does not match');
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      await register(email, password);
+
+      navigation.navigate('Login');
+    } catch (error: any) {
+      console.log(error.response?.data || error.message);
+      Alert.alert('Signup Failed', error.response?.data?.message || error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const handleLogin = () => {};
-  const handleSignInWithProvider = () => {};
-  const handleNavigateToLogin = () => {
-    navigation.navigate('Login');
-  };
   return (
     <View className="px-5 flex-1 bg-white pt-5">
-      <Text className="text-4xl font-bold text-start ">
-        Create an
-        {'\n'} account
-      </Text>
-      <View>
-        {/* text input */}
-        <FormField
-          title="Email"
-          value={form.email}
-          setError={setEmailError}
-          error={emailError}
-          handleChangeText={(e: any) => {
-            setEmailError('');
-            setForm({...form, email: e});
-          }}
-          placeholder="username or email"
-          otherStyles="my-5"
-        />
-        <View>
-          <FormField
-            title="Password"
-            value={form.password}
-            setError={setPasswordError}
-            error={emailError}
-            handleChangeText={(e: any) => {
-              setPasswordError('');
-              setForm({...form, password: e});
-            }}
-            placeholder="Password"
-            otherStyles="mt-5"
-          />
-          <FormField
-            title="Password"
-            value={form.confirmPassword}
-            setError={setPasswordError}
-            error={passwordError}
-            handleChangeText={(e: any) => {
-              setPasswordError('');
-              setForm({...form, password: e});
-            }}
-            placeholder="ConfirmPassword"
-            otherStyles="mt-5"
-          />
+      <Text className="text-4xl font-bold mb-6">Create an Account</Text>
 
-          <Text className="text-[#676767] text-lg font-medium self-end">
-            By clicking the <Text className="text-red-600"> Register</Text>{' '}
-            button, you agree to the public offer
+      <FormInput
+        prefixIcon={<Icon name={'mail'} size={24} color="#aaa" />}
+        placeholder="Email"
+        value={form.email}
+        setValue={(val) => setForm({ ...form, email: val })}
+      />
+
+      <FormInput
+        prefixIcon={<Icon name={'lock'} size={24} color="#aaa" />}
+        suffixIcon={
+          <Icon
+            onPress={() => setShowPassword(!showPassword)}
+            name={showPassword ? 'eye-off' : 'eye'}
+            size={24}
+            color="#aaa"
+          />
+        }
+        placeholder="Password"
+        value={form.password}
+        setValue={(val) => setForm({ ...form, password: val })}
+        secureTextEntry={!showPassword}
+      />
+
+      <FormInput
+        prefixIcon={<Icon name={'lock'} size={24} color="#aaa" />}
+        suffixIcon={
+          <Icon
+            onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+            name={showConfirmPassword ? 'eye-off' : 'eye'}
+            size={24}
+            color="#aaa"
+          />
+        }
+        placeholder="Confirm Password"
+        value={form.confirmPassword}
+        setValue={(val) => setForm({ ...form, confirmPassword: val })}
+        secureTextEntry={!showConfirmPassword}
+      />
+
+      <Text className="text-[#676767] text-sm text-right mb-4">
+        By clicking the <Text className="text-blue-600">Register</Text> button, you agree to our terms.
+      </Text>
+
+      <TouchableOpacity
+        onPress={handleSignup}
+        className="bg-blue-500 py-4 rounded-lg"
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? (
+          <ActivityIndicator color="#fff" />
+        ) : (
+          <Text className="text-white text-center font-bold text-lg">
+            Register
           </Text>
-        </View>
-        {/* submit btn */}
-        <CustomButton
-          title="Login"
-          handlePress={handleLogin}
-          isLoading={isSubmitting}
-          containerStyle="mt-7 py-5"
-        />
-        {/* or continue with  */}
-        <View className="mt-5 self-center">
-          <Text className="text-[#575757] text-lg self-center mt-5">
-            {' '}
-            - OR Continue with -{' '}
+        )}
+      </TouchableOpacity>
+
+      <Text className="text-[#575757] text-lg self-center mt-10">
+        - OR Continue with -
+      </Text>
+
+      <View className="flex flex-row justify-center mt-5 gap-4">
+        {ContinueWithData.map((item) => (
+          <TouchableOpacity
+            key={item.id}
+            onPress={() => { }}
+            className="rounded-full border-2 bg-blue-50 border-blue-500 p-4"
+          >
+            <Image source={item.image} className="w-8 h-8" />
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      <View className="flex flex-row justify-center items-center mt-8 gap-x-2">
+        <Text className="text-[#575757] text-lg">Already have an account?</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <Text className="text-lg font-bold underline text-blue-500">
+            Login
           </Text>
-          <View className="flex flex-row items-center gap-3 mt-5 justify-between">
-            {ContinueWithData.map((item, index) => {
-              return (
-                <TouchableOpacity
-                  key={item.id}
-                  onPress={handleSignInWithProvider}
-                  className="rounded-full border-2 bg-red-50 border-red-500 p-4">
-                  <Image
-                    source={item.image}
-                    className="w-8 h-8 "
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-          <View className="flex flex-row  items-center gap-x-2 justify-center mt-8">
-            <Text className="text-[#575757] text-xl ">
-              I Already Have an Account
-            </Text>
-            <TouchableOpacity onPress={handleNavigateToLogin}>
-              <Text className="text-xl font-bold underline text-action ">
-                Login
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
 };
 
 export default SignupScreen;
-
-type ContinueWithType = {
-  image: ImageSourcePropType | undefined;
-  id: number;
-  name: string;
-};
-
-const ContinueWithData: ContinueWithType[] = [
-  {
-    id: 0,
-    name: 'google',
-    image: icons.google,
-  },
-  {
-    id: 1,
-    name: 'apple',
-    image: icons.apple,
-  },
-  {
-    id: 2,
-    name: 'facebook',
-    image: icons.facebook,
-  },
-];
