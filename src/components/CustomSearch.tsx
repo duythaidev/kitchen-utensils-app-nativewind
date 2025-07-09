@@ -29,7 +29,7 @@ const CustomSearch = ({ placeholder, initialQuery, } : CustomSearchProps) => {
   const [query, setQuery] = useState(initialQuery || '');
   const handlePress = () => {
     navigation.navigate('SearchTab', { query });
-    setQuery('');
+    // setQuery('');
   };
   const handleKeyDown = (event: any) => {
     if (event.nativeEvent.key === 'Enter') {

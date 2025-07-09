@@ -24,7 +24,9 @@ import ProfileScreen from './src/screens/ProfileScreen';
 import HomeTab from './src/tabs/HomeTab';
 import SearchProductScreen from './src/screens/SearchProductScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { RouteTabParamList } from './src/tabs/MainTabs';
+// import { RouteTabParamList } from './src/tabs/MainTabs';
+import TabBarIcon from './src/components/TabBarIcon';
+import Icon from '@react-native-vector-icons/lucide';
 
 export type RouteStackParamList = {
   App: undefined;
@@ -78,10 +80,17 @@ export const DrawerStack = () => (
       {() => <MainTabs initialTab="ProfileTab" />}
     </Drawer.Screen>
   </Drawer.Navigator>
-  
-  );
-  
-  
+
+);
+
+type RouteTabParamList = {
+  HomeTab: undefined;
+  ProfileTab: undefined;
+  OrderTab: undefined;
+  CartTab: undefined;
+  SearchTab: { query?: string, category_id?: string } | undefined;
+  ForgotPasswordTab: undefined;
+};
 
 export const MainTabs = ({ initialTab = "HomeTab" }: { initialTab?: keyof RouteTabParamList }) => {
   return (
@@ -90,12 +99,52 @@ export const MainTabs = ({ initialTab = "HomeTab" }: { initialTab?: keyof RouteT
       screenOptions={{
         headerShown: false,
         tabBarStyle: { height: 65, backgroundColor: 'white' },
+        tabBarInactiveTintColor: 'black',
+        tabBarActiveTintColor: '#f87171',
+        tabBarLabelStyle: {
+          fontSize: 12,
+        }
       }}
     >
-      <Tab.Screen name="HomeTab" component={HomeTab} />
-      <Tab.Screen name="CartTab" component={CartTab} />
-      <Tab.Screen name="SearchTab" component={SearchProductScreen} />
-      <Tab.Screen name="ProfileTab" component={ProfileScreen} />
+      <Tab.Screen name="HomeTab" component={HomeTab}
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({ focused }) => (
+            <Icon name="house" size={24} color={focused ? '#f87171' : 'black'} />
+          ),
+        }}
+      />
+      <Tab.Screen name="SearchTab" component={SearchProductScreen}
+        options={{
+          tabBarLabel: 'Search',
+          tabBarIcon: ({ focused }) => (
+            <Icon name="search" size={24} color={focused ? '#f87171' : 'black'} />
+          ),
+        }}
+      />
+      <Tab.Screen name="CartTab" component={CartTab}
+        options={{
+          tabBarLabel: '',
+          tabBarIcon: ({ focused }) => (
+            <TabBarItem source={icons.cart} focused={focused} cart name="Cart" />
+          ),
+        }}
+      />
+      <Tab.Screen name="OrderTab" component={ProfileScreen}
+        options={{
+          tabBarLabel: 'Search',
+          tabBarIcon: ({ focused }) => (
+            <Icon name="shopping-basket" size={24} color={focused ? '#f87171' : 'black'} />
+          ),
+        }} />
+      <Tab.Screen name="ProfileTab" component={ProfileScreen}
+        options={{
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({ focused }) => (
+            <Icon name="user" size={24} color={focused ? '#f87171' : 'black'} />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 };

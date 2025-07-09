@@ -22,8 +22,7 @@ const ITEM_WIDTH = (width - 48) / 2;
 const SearchProductScreen = () => {
 
   const route = useRoute();
-  const { query } = route.params || {};
-  console.log('query', query);
+  const { query } = route.params || { query: '' };
   const [products, setProducts] = useState<IProduct[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [keyword, setKeyword] = useState(query || '');
@@ -32,7 +31,7 @@ const SearchProductScreen = () => {
   const [loading, setLoading] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const navigation = useNavigation();
-  
+
   const fetchProducts = async () => {
     try {
       setLoading(true);
@@ -68,8 +67,12 @@ const SearchProductScreen = () => {
   }, []);
 
   useEffect(() => {
+    setKeyword(query);
+  }, [query]);
+
+  useEffect(() => {
     fetchProducts();
-  }, [keyword, selectedCategory, priceSort]);
+  }, [keyword, selectedCategory, priceSort ]);
 
   // console.log('selectedCategory', selectedCategory, priceSort);
 
@@ -178,7 +181,8 @@ const SearchProductScreen = () => {
       </View>
 
       <View className="flex-row items-center justify-between mb-4 ]">
-        <View className="bg-white flex-row w-[82%] h-[55px] items-center px-3 py-2 rounded-xl">
+        <View
+          className="bg-white flex-row w-[82%] h-[55px] items-center px-3 py-2 rounded-xl">
           <Icon name="search" className='mr-2' size={24} color="#f87171" />
           <TextInput
             placeholder="Search product..."
@@ -190,17 +194,20 @@ const SearchProductScreen = () => {
         <TouchableOpacity
           onPress={() => setShowFilter(!showFilter)}
         >
-          <View className="px-3 py-2 h-[55px] w-[55px] rounded-xl flex items-center justify-center bg-white">
+          <View
+            className="px-3 py-2 h-[55px] w-[55px] rounded-xl flex items-center justify-center bg-white">
             <Icon name={showFilter ? "x" : "filter"} size={30} color="#f87171" />
           </View>
         </TouchableOpacity>
       </View>
 
       {showFilter && (
-        <View className="bg-white px-3 py-3 rounded-xl mb-4">
-          <Text className="font-semibold mb-2">Filter</Text>
+        <View style={{ borderColor: '#f87171', borderWidth: 1, elevation: 3 }}
+          className="bg-white px-3 py-3 rounded-xl mb-4">
+          <Text className="font-semibold text-xl mb-2">Filter</Text>
           <Text className="text-sm mb-1 text-gray-600">Category</Text>
           <Picker
+            style={{ backgroundColor: '#eee' }}
             selectedValue={selectedCategory}
             onValueChange={val => setSelectedCategory(val)}
           >
@@ -212,6 +219,7 @@ const SearchProductScreen = () => {
 
           <Text className="text-sm mt-2 mb-1 text-gray-600">Sort by Price</Text>
           <Picker
+            style={{ backgroundColor: '#eee' }}
             selectedValue={priceSort}
             onValueChange={val => setPriceSort(val)}
           >

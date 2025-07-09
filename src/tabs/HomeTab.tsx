@@ -108,7 +108,7 @@ const HomeTab = () => {
         <Text className="text-2xl font-bold">Categories</Text>
         <View className="flex flex-row gap-x-3">
 
-          <TouchableOpacity onPress={() => tabNavigation.navigate('SearchTab', { category: 'a' })}>
+          <TouchableOpacity onPress={() => tabNavigation.navigate('SearchTab')}>
             <Text className='text-red-400'>View All</Text>
           </TouchableOpacity>
         </View>

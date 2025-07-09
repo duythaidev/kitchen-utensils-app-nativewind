@@ -14,24 +14,21 @@ import ProfileScreen from '../screens/ProfileScreen';
 import CartTab from './CartTab';
 import SearchTab from '../screens/SearchProductScreen';
 import HomeTab from './HomeTab';
+import TabBarIcon from '../components/TabBarIcon';
 // import { AuthStack } from '../../App';
 
 export type RouteTabParamList = {
     HomeTab: undefined;
     ProfileTab: undefined;
-    CheckoutTab: undefined;
+    OrderTab: undefined;
     CartTab: undefined;
+    SearchTab: { query?: string, category_id?: string } | undefined;
     ForgotPasswordTab: undefined;
-    SearchTab: undefined;
 };
 
 const Tab = createBottomTabNavigator<RouteTabParamList>();
 
-const TabBarIcon = ({ focused, icon, className }: { focused: boolean; icon: any, className: string }) => (
-    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <Image source={icon} className={className} style={{ tintColor: focused ? '#2b6cb0' : 'black' }} />
-    </View>
-);
+
 
 export default function MainTabs() {
 
