@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import {
   Text,
-  TextInput,
   TouchableOpacity,
   View,
   Image,
   Alert,
   ActivityIndicator,
-  StyleSheet,
   Button,
 } from 'react-native';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { icons } from '../constants';
 import Icon from '@react-native-vector-icons/lucide';
-import { getUserProfile, login } from '../api/user';
+import { login } from '../api/user';
 import { FormInput } from '../components/FormInput';
 
 
@@ -92,6 +89,7 @@ const LoginScreen = () => {
         value={email}
         setValue={setEmail}
       />
+      
 
       <FormInput
         prefixIcon={<Icon name={'lock'} size={24} color="#aaa" />}

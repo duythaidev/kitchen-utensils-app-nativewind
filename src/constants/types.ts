@@ -1,4 +1,6 @@
 import {ImageSourcePropType} from 'react-native';
+import { IProductImage } from '../types';
+import { ICategory } from '../types';
 
 type SplashTypes = {
   image: ImageSourcePropType;
@@ -12,24 +14,14 @@ type FeaturesTypes = {
 };
 type ItemDetails = ProductTypes;
 type ProductTypes = {
-  image: string[];
-  status?: {
-    icon?: string;
-    name?: string;
-  };
-  _id: string;
-  title: string;
-  description: string;
-  price: number;
-  priceBeforeDeal: number;
-  priceOff: string;
-  stars: number;
-  numberOfReview: number;
-  ukSide?: string[] | number[];
-  tags: string[];
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+  id: number,
+  product_name: string,
+  price: number,
+  stock: number,
+  discounted_price?: number | null,
+  description?: string | null,
+  category?: ICategory | null,
+  images?: IProductImage[] | null,
 };
 type TabBarTypes = {
   title?: string;

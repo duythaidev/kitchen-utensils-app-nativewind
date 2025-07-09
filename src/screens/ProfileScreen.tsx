@@ -17,21 +17,21 @@ const ProfileScreen = (props: Props) => {
   };
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  useEffect(() => {
-    const checkUser = async () => {
-      const user = await AsyncStorage.getItem('user');
-      if (user) {
-        console.log("user: ", user)
-        console.log("Profile can be accessed: ")
-        setIsAuthenticated(true);
-      } else {
-        console.log("Profile cannot be accessed: ")
-        setIsAuthenticated(false);
-        navigation.navigate('Login');
-      }
-    };
-    checkUser();
-  }, []);
+  // useEffect(() => {
+  //   const checkUser = async () => {
+  //     const user = await AsyncStorage.getItem('user');
+  //     if (user) {
+  //       console.log("user: ", user)
+  //       console.log("Profile can be accessed: ")
+  //       setIsAuthenticated(true);
+  //     } else {
+  //       console.log("Profile cannot be accessed: ")
+  //       setIsAuthenticated(false);
+  //       navigation.navigate('Login');
+  //     }
+  //   };
+  //   checkUser();
+  // }, []);
 
   console.log("isAuthenticated: ", isAuthenticated)
   return (

@@ -10,6 +10,7 @@ import React, {useState} from 'react';
 import {icons} from '../constants';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import Icon from '@react-native-vector-icons/lucide';
 
 type CustomSearchProps = {
   placeholder?: string;
@@ -22,20 +23,16 @@ type ScreenRouteProps = RouteProp<RootStackParamList, 'Search'>;
 type RootStackParamList = {
   Search: {query: string} | undefined;
 };
-const CustomSearch: React.FC<CustomSearchProps> = ({
-  placeholder,
-  initialQuery,
-}) => {
+const CustomSearch: React.FC<CustomSearchProps> = ({ placeholder, initialQuery, }) => {
   const navigation = useNavigation<ScreenNavigationProps>();
-  const route = useRoute<ScreenRouteProps>();
-  const [query, setQuery] = useState('' || initialQuery);
+  const [query, setQuery] = useState(initialQuery || '');
   const handlePress = () => {
-    if (query === '') {
-      return Alert.alert('Please fill the required field');
-    } else {
+    // if (query === '') {
+    //   return Alert.alert('Please fill the required field');
+    // } else {
       navigation.navigate('Search', {query});
       setQuery('');
-    }
+    // }
   };
 
   return (
@@ -56,7 +53,10 @@ const CustomSearch: React.FC<CustomSearchProps> = ({
           placeholderTextColor={'#BBBBBB'}
           onSubmitEditing={handlePress}
         />
-        <Image source={icons.mic} className="w-8 h-8" resizeMode="contain" />
+        <TouchableOpacity onPress={handlePress}>
+          <Icon name="arrow-right" size={24} color="#000" />
+        </TouchableOpacity>
+        {/* <Image source={icons.mic} className=   "w-8 h-8" resizeMode="contain" /> */}
       </View>
     </View>
   );

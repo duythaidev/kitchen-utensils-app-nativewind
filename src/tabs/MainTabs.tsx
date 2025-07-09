@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { ForgotPasswordScreen, HomeScreen, LoginScreen, ProfileScreen, SignupScreen } from '../screens';
-import { CartTab } from '../tabs';
-import { TabBarItem } from '../screens/HomeScreen';
+
+// import { CartTab, SearchTab } from '../tabs';
+import HomeScreen, { TabBarItem } from '../screens/HomeScreen';
 import { icons } from '../constants';
 import { View, Image } from 'react-native';
 import { useEffect, useState } from 'react';
@@ -10,14 +10,19 @@ import { RootStackParamList } from '../screens/OnboardingScreen';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ProfileScreen from '../screens/ProfileScreen';
+import CartTab from './CartTab';
+import SearchTab from '../screens/SearchProductScreen';
+import HomeTab from './HomeTab';
 // import { AuthStack } from '../../App';
 
 export type RouteTabParamList = {
-    HomeScreen: undefined;
-    Profile: undefined;
-    Checkout: undefined;
-    Cart: undefined;
-    ForgotPassword: undefined;
+    HomeTab: undefined;
+    ProfileTab: undefined;
+    CheckoutTab: undefined;
+    CartTab: undefined;
+    ForgotPasswordTab: undefined;
+    SearchTab: undefined;
 };
 
 const Tab = createBottomTabNavigator<RouteTabParamList>();
@@ -31,7 +36,7 @@ const TabBarIcon = ({ focused, icon, className }: { focused: boolean; icon: any,
 export default function MainTabs() {
 
     return (
-        <Tab.Navigator initialRouteName='HomeScreen'
+        <Tab.Navigator initialRouteName='HomeTab'
             screenOptions={{
                 headerShown: false,
                 tabBarStyle: {
@@ -40,7 +45,7 @@ export default function MainTabs() {
                 }
             }}
         >
-            <Tab.Screen name="HomeScreen" component={HomeScreen}
+            <Tab.Screen name="HomeTab" component={HomeTab}
                 options={{
                     tabBarLabel: 'Home',
                     tabBarLabelStyle: {
@@ -53,7 +58,7 @@ export default function MainTabs() {
                 }}
             />
 
-            <Tab.Screen name="Cart" component={CartTab}
+            <Tab.Screen name="CartTab" component={CartTab}
                 options={{
                     tabBarLabel: '',
                     tabBarIcon: ({ focused }) => (
@@ -62,7 +67,14 @@ export default function MainTabs() {
                 }}
             />
 
-            <Tab.Screen name="Profile" component={ProfileScreen}
+            <Tab.Screen name="SearchTab" component={SearchTab}
+                options={{
+                    tabBarIcon: ({ focused }) => (
+                        <TabBarIcon focused={focused} icon={icons.profile} className='w-8 h-8' />
+                    ),
+                }}
+            />
+            <Tab.Screen name="ProfileTab" component={ProfileScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <TabBarIcon focused={focused} icon={icons.profile} className='w-8 h-8' />
