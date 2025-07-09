@@ -18,13 +18,16 @@ import { removeItem } from '../utils/AsyncStorage';
 import { IProduct } from '../types';
 import axios from 'axios';
 import Icon from '@react-native-vector-icons/lucide';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { RouteDrawerParamList } from '../../App';
 
 type RootStackParamList = {
   ProfileTab: undefined;
 };
 
 const HomeTab = () => {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const stackNavigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const drawerNavigation = useNavigation<DrawerNavigationProp<RouteDrawerParamList>>();
   const [products, setProducts] = useState<IProduct[]>([]);
   const fetchData = async () => {
     try {
@@ -48,7 +51,7 @@ const HomeTab = () => {
   }, []);
 
   const NavigateToProfile = async () => {
-    navigation.navigate('ProfileTab');
+    stackNavigation.navigate('ProfileTab');
     // await removeItem('onboarded');
   };
 
@@ -58,9 +61,11 @@ const HomeTab = () => {
     <ScrollView>
       {/* Header */}
       <View className="flex flex-row items-center justify-between mx-5">
-        <TouchableOpacity onPress={() => navigation.navigate('Drawer')}>
+        <TouchableOpacity onPress={() => drawerNavigation.openDrawer()}>
           <Icon name="menu" size={30} color="#000" />
+
         </TouchableOpacity>
+
 
         <Image source={images.logo} resizeMode="contain" style={{ width: 75, height: 75 }} />
         <TouchableOpacity onPress={NavigateToProfile}>
