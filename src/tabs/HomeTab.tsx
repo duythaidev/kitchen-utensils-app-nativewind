@@ -13,7 +13,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { CustomSearch, ProductItem } from '../components';
 import { CategoriesData } from '../constants/data';
 import { removeItem } from '../utils/AsyncStorage';
-import { IProduct } from '../types';
+import { ICategory, IProduct } from '../types';
 import axios from 'axios';
 import Icon from '@react-native-vector-icons/lucide';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
@@ -29,22 +29,30 @@ type RootStackParamList = {
 };
 
 const HomeTab = () => {
-
-
   const stackNavigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const drawerNavigation = useNavigation<DrawerNavigationProp<RouteDrawerParamList>>();
+
   const [products, setProducts] = useState<IProduct[]>([]);
+  const [categories, setCategories] = useState<ICategory[]>([]);
   const fetchData = async () => {
     try {
-      const res = await axios.get('http://10.0.2.2:8080/api/v1/products/', {
+      const res = await axios.get('http://10.0.2.2:8080/api/v1/products?limit=6', {
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
       });
-      const data = await res.data;
-      console.log('data', data);
+      const categoriesRes = await axios.get('http://10.0.2.2:8080/api/v1/categories?limit=6', {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      });
+      const data = await res.data.data;
+      const categoriesData = await categoriesRes.data.data;
+      // console.log('data', data);
       setProducts(data);
+      setCategories(categoriesData);
     } catch (error) {
       console.error('Error fetching products:', error);
     }
@@ -60,14 +68,17 @@ const HomeTab = () => {
     // await removeItem('onboarded');
   };
 
-  const handleSelectCategory = () => { };
-
+  const handleSelectCategory = (category: ICategory) => {
+    console.log('category', category);
+    // drawerNavigation.navigate('CategoryTab', { category });
+  };
 
 
   return (
     <ScrollView>
       {/* Header */}
-    
+
+
       <View className="flex flex-row items-center justify-between mx-5">
         <TouchableOpacity onPress={() => drawerNavigation.openDrawer()}>
           <Icon name="menu" size={30} color="#f87171" />
@@ -100,15 +111,19 @@ const HomeTab = () => {
       {/* Categories */}
       <View>
         <FlatList
-          data={CategoriesData}
+          data={categories}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={handleSelectCategory} >
-              <Image style={{ elevation: 3, }}
-                source={{ uri: item.image }}
-                className="w-24 h-24 rounded-full"
-              />
+            <TouchableOpacity onPress={() => handleSelectCategory(item)} >
+              <View className="w-24 h-24 rounded-full"
+                style={{ elevation: 3 }}
+              >
+                <Image className="w-24 h-24 rounded-full"
+                  source={{ uri: item.image_url || 'https://placehold.jp/600x400' }}
+                />
+              </View>
+
               <Text className="text-red-400 text-center text-lg font-medium mt-2">
-                {item.title}
+                {item.category_name}
               </Text>
             </TouchableOpacity>
           )}

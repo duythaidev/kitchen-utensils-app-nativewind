@@ -48,6 +48,7 @@ export interface IOrderDetail {
 export interface ICategory {
     id: number,
     category_name: string,
+    image_url?: string,
 }
 
 export interface IProductImage {

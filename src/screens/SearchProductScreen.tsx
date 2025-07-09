@@ -10,58 +10,70 @@ import {
   Dimensions,
 } from 'react-native';
 import axios from 'axios';
-import { IProduct } from '../types';
-import { icons } from '../constants';
+import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
+import { IProduct, ICategory } from '../types';
+import { icons } from '../constants';
 import Icon from '@react-native-vector-icons/lucide';
-import CustomSearch from '../components/CustomSearch';
 
 const { width } = Dimensions.get('window');
-const ITEM_WIDTH = (width - 48) / 2; // margin 16 + 16 + 8 spacing
+const ITEM_WIDTH = (width - 48) / 2;
 
 const SearchProductScreen = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
-  const [query, setQuery] = useState('');
+  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [keyword, setKeyword] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<number | ''>('');
+  const [priceSort, setPriceSort] = useState<'lth' | 'htl' | ''>('');
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`http://10.0.2.2:8080/api/v1/products`);
-      setProducts(res.data);
+      const params: any = {};
+      if (keyword) params.keyword = keyword;
+      if (selectedCategory) params.category = selectedCategory;
+      if (priceSort) params.priceSort = priceSort;
+
+      const res = await axios.get('http://10.0.2.2:8080/api/v1/products', {
+        params,
+      });
+      setProducts(res.data.data);
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error('Fetch products error:', error);
     } finally {
       setLoading(false);
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get('http://10.0.2.2:8080/api/v1/categories');
+      setCategories(res.data);
+    } catch (err) {
+      console.error('Fetch categories error:', err);
+    }
+  };
+
   useEffect(() => {
+    fetchCategories();
     fetchProducts();
   }, []);
 
-  const filteredProducts = products.filter(product =>
-    product.product_name.toLowerCase().includes(query.toLowerCase())
-  );
+  useEffect(() => {
+    fetchProducts();
+  }, [keyword, selectedCategory, priceSort]);
 
   const renderItem = ({ item }: { item: IProduct }) => {
     const mainImage = item.images?.find(img => img.is_main)?.image_url || 'https://placehold.jp/150x150.png';
     const price = item.discounted_price || item.price;
-    const priceOff =
-      item.discounted_price
-        ? Math.round(((item.price - item.discounted_price) / item.price) * 100)
-        : 0;
 
     return (
       <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { productId: item.id })}>
-        <View
-          className=" p-3 rounded-xl mb-4 bg-white"
-          style={{ width: ITEM_WIDTH, elevation: 2 }}
-        >
-        
+        <View style={{ width: ITEM_WIDTH }} className="p-3 rounded-xl mb-4 bg-white shadow">
           <Image
-            source={{ uri: mainImage || 'https://placehold.jp/150x150.png' }}
+            source={{ uri: mainImage }}
             style={{ width: '100%', height: 120, borderRadius: 12 }}
             resizeMode="cover"
           />
@@ -71,47 +83,7 @@ const SearchProductScreen = () => {
           <Text className="text-sm text-gray-500" numberOfLines={2}>
             {item.description}
           </Text>
-          <View className="flex flex-row items-center mt-1">
-            <Text className="text-base font-bold text-orange-600">₹{price}</Text>
-            {item.discounted_price && (
-              <Text className="ml-2 text-sm line-through text-gray-400">₹{item.price}</Text>
-            )}
-          </View>
-          {item.discounted_price && (
-            <Text className="text-xs font-medium text-green-500">{priceOff}% OFF</Text>
-          )}
-          <View className="flex flex-row items-center mt-1">
-            <View className="relative flex-row">
-              {/* Gray stars */}
-              {Array.from({ length: 5 }).map((_, index) => (
-                <Icon
-                  key={`gray-${index}`}
-                  name="star"
-                  size={14}
-                  color="#ccc"
-                />
-              ))}
-              {/* Yellow overlay */}
-              <View
-                style={{
-                  flexDirection: 'row',
-                  position: 'absolute',
-                  overflow: 'hidden',
-                  width: `${(item.stars || 0) * 20}%`, // 5 stars = 100%
-                }}
-                pointerEvents="none"
-              >
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <Image
-                    key={`yellow-${index}`}
-                    source={icons.star}
-                    style={{ width: 14, height: 14, tintColor: '#facc15' }}
-                  />
-                ))}
-              </View>
-            </View>
-            <Text className="ml-1 text-xs text-gray-600">({item.numberOfReview || 0})</Text>
-          </View>
+          <Text className="text-base font-bold text-orange-600">₹{price}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -119,7 +91,6 @@ const SearchProductScreen = () => {
 
   return (
     <View className="flex-1 bg-gray-100 px-4 pt-5">
-      {/* Header */}
       <View className="flex-row items-center justify-between mb-4">
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon name="arrow-left" size={24} color="#000" />
@@ -128,29 +99,45 @@ const SearchProductScreen = () => {
         <View style={{ width: 24 }} />
       </View>
 
-      {/* Search Input */}
       <View className="bg-white flex-row items-center px-3 py-2 rounded-xl mb-4">
         <Image source={icons.search} className="w-5 h-5 mr-2" />
         <TextInput
-          placeholder="Search any product..."
+          placeholder="Search..."
           className="flex-1 text-base"
-          value={query}
-          onChangeText={setQuery}
+          value={keyword}
+          onChangeText={setKeyword}
         />
-        <View className="flex flex-row gap-x-3">
-          <View className="bg-white rounded-lg flex-row items-center p-2">
-            <Icon name="filter" size={20} color="black" />
-            <Text className="text-black-100">Filter</Text>
-          </View>
-        </View>
       </View>
 
-      {/* Product Grid */}
+      <View className="bg-white px-3 py-3 rounded-xl mb-4">
+        <Text className="font-semibold mb-2">Filter</Text>
+        <Text className="text-sm mb-1 text-gray-600">Category</Text>
+        <Picker
+          selectedValue={selectedCategory}
+          onValueChange={val => setSelectedCategory(val)}
+        >
+          <Picker.Item label="All categories" value="" />
+          {categories.map(cat => (
+            <Picker.Item key={cat.id} label={cat.category_name} value={cat.id} />
+          ))}
+        </Picker>
+
+        <Text className="text-sm mt-2 mb-1 text-gray-600">Sort by Price</Text>
+        <Picker
+          selectedValue={priceSort}
+          onValueChange={val => setPriceSort(val)}
+        >
+          <Picker.Item label="Default" value="" />
+          <Picker.Item label="Low to High" value="lth" />
+          <Picker.Item label="High to Low" value="htl" />
+        </Picker>
+      </View>
+
       {loading ? (
         <ActivityIndicator size="large" color="#000" className="mt-10" />
       ) : (
         <FlatList
-          data={filteredProducts}
+          data={products}
           renderItem={renderItem}
           keyExtractor={item => item.id.toString()}
           numColumns={2}
