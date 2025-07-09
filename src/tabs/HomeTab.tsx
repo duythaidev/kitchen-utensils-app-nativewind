@@ -62,8 +62,7 @@ const HomeTab = () => {
       {/* Header */}
       <View className="flex flex-row items-center justify-between mx-5">
         <TouchableOpacity onPress={() => drawerNavigation.openDrawer()}>
-          <Icon name="menu" size={30} color="#000" />
-
+          <Icon name="menu" size={30} color="black" />
         </TouchableOpacity>
 
 
@@ -76,16 +75,28 @@ const HomeTab = () => {
       {/* Search */}
       <CustomSearch initialQuery="" />
 
+      {/* Deal banner */}
+      <TouchableOpacity>
+        <View className="w-full  justify-between items-center border-2 border-red-500">
+          <Image className=''
+            style={{
+              // width: '300px',
+              height: '50%',
+              borderRadius: 10,
+            }}
+            source={images.deal_off} />
+        </View>
+      </TouchableOpacity>
+
+
       {/* Features */}
       <View className="flex my-5 flex-row mx-5 justify-between">
-        <Text className="text-2xl font-bold">All Features</Text>
+        <Text className="text-2xl font-bold">Categories</Text>
         <View className="flex flex-row gap-x-3">
-          {FeaturesData.map(item => (
-            <View className="bg-white rounded-lg flex-row items-center px-2" key={item.id}>
-              <Text className="text-black-100">{item.title}</Text>
-              <Image source={item.image} className="w-4 h-4" resizeMode="contain" />
-            </View>
-          ))}
+
+          <TouchableOpacity>
+            <Text className='text-blue-500'>View All</Text>
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -94,9 +105,12 @@ const HomeTab = () => {
         <FlatList
           data={CategoriesData}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={handleSelectCategory}>
-              <Image source={{ uri: item.image }} className="w-24 h-24 rounded-full" />
-              <Text className="text-black-100/80 text-center text-lg font-medium">
+            <TouchableOpacity onPress={handleSelectCategory} >
+              <Image style={{ elevation: 3, }}
+                source={{ uri: item.image }}
+                className="w-24 h-24 rounded-full"
+              />
+              <Text className="text-black-100/80 text-center text-lg font-medium mt-2">
                 {item.title}
               </Text>
             </TouchableOpacity>
@@ -109,24 +123,21 @@ const HomeTab = () => {
         />
       </View>
 
-      {/* Deal banner */}
-      <View>
-        <Image source={images.deal_off} resizeMode="contain" className="w-full mt-8" />
-      </View>
-
       {/* Daily Deal */}
-      <View className="bg-blue-500 rounded-xl justify-between flex flex-row mx-5 pl-5 py-5">
+      <View className="bg-blue-500 rounded-xl justify-between items-center flex flex-row mx-5 mt-5 pl-5 py-5">
         <View>
-          <Text className="text-white text-2xl font-semibold">Daily of the Day</Text>
+          <Text className="text-white text-2xl font-semibold">Deal of the Day</Text>
           <View className="flex flex-row mt-3 items-center gap-x-1">
             <Image source={icons.calender} resizeMode="contain" className="w-6 h-6" />
             <Text className="text-white text-base font-medium">22h 55m 20s remaining</Text>
           </View>
         </View>
-        <View className="rounded-lg border-white border-2 mr-3 h-12 px-3 flex flex-row gap-x-px items-center">
-          <Text className="text-white font-medium text-lg">View all</Text>
-          <Image source={icons.show_all} resizeMode="contain" className="w-6 h-6" />
-        </View>
+        <TouchableOpacity>
+          <View className="rounded-lg border-white border-2 mr-3 h-12 px-3 flex flex-row gap-x-px items-center">
+            <Text className="text-white font-medium text-lg" >View all</Text>
+            <Icon name="arrow-right" size={20} color="white" />
+          </View>
+        </TouchableOpacity>
       </View>
 
       {/* Product List */}

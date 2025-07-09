@@ -6,7 +6,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import GetStartedScreen from './src/screens/GetStartedScreen';
 import { ItemDetails } from './src/constants/types';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import MainTabs from './src/tabs/MainTabs';
+// import MainTabs from './src/tabs/MainTabs';
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUserProfile } from './src/api/user';
@@ -23,9 +23,11 @@ import { icons } from './src/constants';
 import ProfileScreen from './src/screens/ProfileScreen';
 import HomeTab from './src/tabs/HomeTab';
 import SearchProductScreen from './src/screens/SearchProductScreen';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { RouteTabParamList } from './src/tabs/MainTabs';
 
 export type RouteStackParamList = {
-  Onboarding: undefined;
+  App: undefined;
   GetStarted: undefined;
   Login: undefined;
   Signup: undefined;
@@ -37,6 +39,7 @@ export type RouteStackParamList = {
   DrawerStack: undefined;
   ProductDetails: { itemDetails: ItemDetails } | undefined;
 };
+
 export type RouteDrawerParamList = {
   HomeDrawer: undefined;
   CartDrawer: undefined;
@@ -46,25 +49,13 @@ export type RouteDrawerParamList = {
 
 const Stack = createNativeStackNavigator<RouteStackParamList>();
 const Drawer = createDrawerNavigator<RouteDrawerParamList>();
+const Tab = createBottomTabNavigator<RouteTabParamList>();
 
-export const DrawerStack = () => (
-  <Drawer.Navigator initialRouteName='HomeDrawer'
-    screenOptions={{
-      headerShown: false,
-    }}
-  >
-    <Drawer.Screen name="HomeDrawer" component={MainTabs} />
-    <Drawer.Screen name="CartDrawer" component={CartTab} />
-    <Drawer.Screen name="SearchDrawer" component={SearchProductScreen} />
-    <Drawer.Screen name="ProfileDrawer" component={ProfileScreen} />
-  </Drawer.Navigator>
-);
 
 const MainStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
 
-    <Stack.Screen name="Home" component={DrawerStack} />
-    {/* <Stack.Screen name="DrawerStack" component={DrawerStack} /> */}
+    <Stack.Screen name="App" component={DrawerStack} />
     <Stack.Screen name="ProductDetails" component={ProductsDetailsScreen} />
     <Stack.Screen name="Login" component={LoginScreen} />
     <Stack.Screen name="Signup" component={SignupScreen} />
@@ -72,19 +63,53 @@ const MainStack = () => (
   </Stack.Navigator>
 );
 
+export const DrawerStack = () => (
+  <Drawer.Navigator screenOptions={{ headerShown: false }}>
+    <Drawer.Screen name="Home" >
+      {() => <MainTabs initialTab="HomeTab" />}
+    </Drawer.Screen>
+    <Drawer.Screen name="Search">
+      {() => <MainTabs initialTab="SearchTab" />}
+    </Drawer.Screen>
+    <Drawer.Screen name="Cart">
+      {() => <MainTabs initialTab="CartTab" />}
+    </Drawer.Screen>
+    <Drawer.Screen name="Profile">
+      {() => <MainTabs initialTab="ProfileTab" />}
+    </Drawer.Screen>
+  </Drawer.Navigator>
+  
+  );
+  
+  
+
+export const MainTabs = ({ initialTab = "HomeTab" }: { initialTab?: keyof RouteTabParamList }) => {
+  return (
+    <Tab.Navigator
+      initialRouteName={initialTab}
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: { height: 65, backgroundColor: 'white' },
+      }}
+    >
+      <Tab.Screen name="HomeTab" component={HomeTab} />
+      <Tab.Screen name="CartTab" component={CartTab} />
+      <Tab.Screen name="SearchTab" component={SearchProductScreen} />
+      <Tab.Screen name="ProfileTab" component={ProfileScreen} />
+    </Tab.Navigator>
+  );
+};
+
+
+
 
 export default function App() {
-
 
   return (
     <SafeAreaProvider>
       <SafeAreaView className='flex-1' edges={['right', 'left', 'top']}>
         <NavigationContainer>
-          {/* {isAuthenticated ? (
-            <MainTabs />
-          ) : ( */}
           <MainStack />
-          {/* )} */}
         </NavigationContainer>
       </SafeAreaView>
     </SafeAreaProvider>

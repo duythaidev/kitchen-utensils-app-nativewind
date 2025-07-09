@@ -133,6 +133,12 @@ const SearchProductScreen = () => {
           value={query}
           onChangeText={setQuery}
         />
+        <View className="flex flex-row gap-x-3">
+          <View className="bg-white rounded-lg flex-row items-center p-2">
+            <Icon name="filter" size={20} color="black" />
+            <Text className="text-black-100">Filter</Text>
+          </View>
+        </View>
       </View>
 
       {/* Product Grid */}

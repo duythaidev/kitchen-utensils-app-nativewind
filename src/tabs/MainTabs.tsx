@@ -36,7 +36,8 @@ const TabBarIcon = ({ focused, icon, className }: { focused: boolean; icon: any,
 export default function MainTabs() {
 
     return (
-        <Tab.Navigator initialRouteName='HomeTab'
+        <Tab.Navigator
+        //  initialRouteName='HomeTab'
             screenOptions={{
                 headerShown: false,
                 tabBarStyle: {
@@ -45,7 +46,7 @@ export default function MainTabs() {
                 }
             }}
         >
-            <Tab.Screen name="HomeTab" component={HomeTab}
+            <Tab.Screen name="Home" component={HomeTab}
                 options={{
                     tabBarLabel: 'Home',
                     tabBarLabelStyle: {

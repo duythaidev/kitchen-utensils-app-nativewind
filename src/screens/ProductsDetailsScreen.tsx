@@ -17,14 +17,14 @@ import { RouteTabsParamList } from './HomeScreen';
 import { FeaturesData } from '../tabs/HomeTab';
 import ProductItem from '../components/ProductItem';
 import { IProduct } from '../types';
-
+import Icon from '@react-native-vector-icons/lucide';
 type ScreenRouteProps = RouteProp<RouteStackParamList, 'ProductDetails'>;
 
 type ProductDetailsProps = {
   route: ScreenRouteProps;
 };
 
-const ProductsDetailsScreen: React.FC<ProductDetailsProps> = ({ route }) => {
+const ProductsDetailsScreen = ({ route }: ProductDetailsProps) => {
   const { itemDetails } = route.params || {};
   const navigation =
     useNavigation<StackNavigationProp<RouteTabsParamList, 'Cart'>>();
@@ -34,7 +34,7 @@ const ProductsDetailsScreen: React.FC<ProductDetailsProps> = ({ route }) => {
   };
 
   const NavigateToCart = () => {
-    navigation.navigate('Cart', { itemDetails: itemDetails! });
+    navigation.navigate('App', { itemDetails: itemDetails! });
   };
 
   const mainImage = itemDetails?.images?.find(img => img.is_main)?.image_url ?? '';
@@ -48,10 +48,12 @@ const ProductsDetailsScreen: React.FC<ProductDetailsProps> = ({ route }) => {
       {/* Header */}
       <View className="flex flex-row justify-between items-center">
         <TouchableOpacity onPress={GoBack}>
-          <Image source={icons.next1} className="rotate-180 w-8 h-8" resizeMode="contain" />
+          <Icon name="arrow-left" size={30} color="black" />
+          {/* <Image source={icons.next1} className="rotate-180 w-8 h-8" resizeMode="contain" /> */}
         </TouchableOpacity>
         <TouchableOpacity onPress={NavigateToCart}>
-          <Image source={icons.cart} className="w-6 h-6" resizeMode="contain" />
+          <Icon name="shopping-cart" size={30} color="black" />
+          {/* <Image source={icons.cart} className="w-6 h-6" resizeMode="contain" /> */}
         </TouchableOpacity>
       </View>
 
@@ -75,7 +77,7 @@ const ProductsDetailsScreen: React.FC<ProductDetailsProps> = ({ route }) => {
       </View>
 
       {/* Product Info */}
-      <View className="mt-5">
+      <View className="mt-5 ">
         <Text className="text-2xl font-bold text-black-100">
           {itemDetails?.product_name}
         </Text>
@@ -132,16 +134,21 @@ const ProductsDetailsScreen: React.FC<ProductDetailsProps> = ({ route }) => {
         {/* Action Buttons */}
         <View className="flex flex-row gap-x-5 items-center mt-5">
           <View className="flex flex-row items-center">
-            <Image source={icons.cart_circle} className="w-12 h-12 -mr-1 z-20" resizeMode="contain" />
-            <View className="bg-blue-600 py-[6px] px-4 -ml-4 rounded-xl z-10">
-              <Text className="text-white font-medium text-2xl">Go To Cart</Text>
-            </View>
+            {/* <Image source={icons.cart_circle} className="w-12 h-12 -mr-1 z-20" resizeMode="contain" /> */}
+            <TouchableOpacity>
+              <View className="flex flex-row items-center bg-blue-600 py-3 px-5 rounded-xl z-10">
+                <Icon name="shopping-cart" size={30} color="white" />
+                <Text className="ml-2 text-white font-medium text-2xl">Add To Cart</Text>
+              </View>
+            </TouchableOpacity>
           </View>
           <View className="flex flex-row items-center">
-            <Image source={icons.buy} className="w-12 h-12 -mr-1 z-20" resizeMode="contain" />
-            <View className="bg-green-500 py-[6px] px-4 -ml-4 rounded-xl z-10">
-              <Text className="text-white font-medium text-2xl">Buy Now</Text>
-            </View>
+            <TouchableOpacity>
+              <View className="flex flex-row items-center bg-green-500 py-3 px-5 rounded-xl z-10">
+                <Icon name="shopping-basket" size={30} color="white" />
+                <Text className= "ml-2 text-white font-medium text-2xl">Buy Now</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
 

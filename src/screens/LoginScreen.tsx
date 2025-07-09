@@ -56,7 +56,7 @@ const LoginScreen = () => {
       await AsyncStorage.setItem('access_token', data.access_token);
       await AsyncStorage.setItem('user', JSON.stringify(data.user));
       console.log("login success")
-      navigation.navigate('Home');
+      navigation.replace('App');
     } catch (error: any) {
       console.log(error)
       Alert.alert('Login Failed', 'ajksdhad' + error.message);
