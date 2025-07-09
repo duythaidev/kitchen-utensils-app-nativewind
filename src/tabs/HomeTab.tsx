@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   FlatList,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 import { icons, images } from '../constants';
@@ -22,6 +23,8 @@ import { RouteDrawerParamList } from '../../App';
 import CarouselBanner from '../components/Carousel';
 import Deal from '../components/Deal';
 import ProductList from '../components/ProductList';
+import { RouteTabParamList } from './MainTabs';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
 
 type RootStackParamList = {
@@ -31,9 +34,11 @@ type RootStackParamList = {
 const HomeTab = () => {
   const stackNavigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const drawerNavigation = useNavigation<DrawerNavigationProp<RouteDrawerParamList>>();
-
+  const tabNavigation = useNavigation<BottomTabNavigationProp<RouteTabParamList>>();
   const [products, setProducts] = useState<IProduct[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);
+
+  const [isLoading, setIsLoading] = useState(true);
   const fetchData = async () => {
     try {
       const res = await axios.get('http://10.0.2.2:8080/api/v1/products?limit=6', {
@@ -53,6 +58,7 @@ const HomeTab = () => {
       // console.log('data', data);
       setProducts(data);
       setCategories(categoriesData);
+      setIsLoading(false);
     } catch (error) {
       console.error('Error fetching products:', error);
     }
@@ -102,7 +108,7 @@ const HomeTab = () => {
         <Text className="text-2xl font-bold">Categories</Text>
         <View className="flex flex-row gap-x-3">
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => tabNavigation.navigate('SearchTab', { category: 'a' })}>
             <Text className='text-red-400'>View All</Text>
           </TouchableOpacity>
         </View>
@@ -110,29 +116,33 @@ const HomeTab = () => {
 
       {/* Categories */}
       <View>
-        <FlatList
-          data={categories}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => handleSelectCategory(item)} >
-              <View className="w-24 h-24 rounded-full"
-                style={{ elevation: 3 }}
-              >
-                <Image className="w-24 h-24 rounded-full"
-                  source={{ uri: item.image_url || 'https://placehold.jp/600x400' }}
-                />
-              </View>
+        {isLoading ? (
+          <ActivityIndicator size="large" color="#f87171" />
+        ) : (
+          <FlatList
+            data={categories}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => handleSelectCategory(item)} >
+                <View className="w-24 h-24 rounded-full"
+                  style={{ elevation: 3 }}
+                >
+                  <Image className="w-24 h-24 rounded-full"
+                    source={{ uri: item.image_url || 'https://placehold.jp/600x400' }}
+                  />
+                </View>
 
-              <Text className="text-red-400 text-center text-lg font-medium mt-2">
-                {item.category_name}
-              </Text>
-            </TouchableOpacity>
-          )}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          ItemSeparatorComponent={() => <View className="w-8" />}
-          ListFooterComponent={<View className="w-6" />}
-          ListHeaderComponent={<View className="w-6" />}
-        />
+                <Text className="text-red-400 text-center text-lg font-medium mt-2">
+                  {item.category_name}
+                </Text>
+              </TouchableOpacity>
+            )}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            ItemSeparatorComponent={() => <View className="w-8" />}
+            ListFooterComponent={<View className="w-6" />}
+            ListHeaderComponent={<View className="w-6" />}
+          />
+        )}
       </View>
 
       {/* Daily Deal */}

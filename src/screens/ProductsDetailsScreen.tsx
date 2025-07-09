@@ -14,7 +14,6 @@ import { AirbnbRating } from 'react-native-ratings';
 import { RouteStackParamList } from '../../App';
 import { icons } from '../constants';
 import { RouteTabsParamList } from './HomeScreen';
-import { FeaturesData } from '../tabs/HomeTab';
 import ProductItem from '../components/ProductItem';
 import { IProduct } from '../types';
 import Icon from '@react-native-vector-icons/lucide';
@@ -37,6 +36,8 @@ const ProductsDetailsScreen = ({ route }: ProductDetailsProps) => {
     navigation.navigate('App', { itemDetails: itemDetails! });
   };
 
+  const item = itemDetails;
+
   const mainImage = itemDetails?.images?.find(img => img.is_main)?.image_url ?? '';
   const price = itemDetails?.discounted_price ?? itemDetails?.price;
   const priceOff = itemDetails?.discounted_price
@@ -48,11 +49,11 @@ const ProductsDetailsScreen = ({ route }: ProductDetailsProps) => {
       {/* Header */}
       <View className="flex flex-row justify-between items-center">
         <TouchableOpacity onPress={GoBack}>
-          <Icon name="arrow-left" size={30} color="black" />
+          <Icon name="arrow-left" size={30} color="#f87171" />
           {/* <Image source={icons.next1} className="rotate-180 w-8 h-8" resizeMode="contain" /> */}
         </TouchableOpacity>
         <TouchableOpacity onPress={NavigateToCart}>
-          <Icon name="shopping-cart" size={30} color="black" />
+          <Icon name="shopping-cart" size={30} color="#f87171" />
           {/* <Image source={icons.cart} className="w-6 h-6" resizeMode="contain" /> */}
         </TouchableOpacity>
       </View>
@@ -66,13 +67,13 @@ const ProductsDetailsScreen = ({ route }: ProductDetailsProps) => {
       <View className="mt-4">
         <Text className="text-black-100 text-lg font-bold">Size: 7UK</Text>
         <View className="flex flex-row gap-x-5 mt-5 items-center">
-          {sizeData.map(item => (
+          {/* {sizeData.map(item => (
             <View
               key={item?.id}
               className="bg-transparent py-1 px-2 rounded-lg border border-blue-500">
               <Text className="text-action text-xl font-medium">{item?.size} UK</Text>
             </View>
-          ))}
+          ))} */}
         </View>
       </View>
 
@@ -146,7 +147,7 @@ const ProductsDetailsScreen = ({ route }: ProductDetailsProps) => {
             <TouchableOpacity>
               <View className="flex flex-row items-center bg-green-500 py-3 px-5 rounded-xl z-10">
                 <Icon name="shopping-basket" size={30} color="white" />
-                <Text className= "ml-2 text-white font-medium text-2xl">Buy Now</Text>
+                <Text className="ml-2 text-white font-medium text-2xl">Buy Now</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -180,14 +181,14 @@ const ProductsDetailsScreen = ({ route }: ProductDetailsProps) => {
           <View className="flex my-5 flex-row mx-5 justify-between">
             <Text className="text-2xl font-bold">282+ Items</Text>
             <View className="flex flex-row gap-x-3">
-              {FeaturesData.map(item => (
-                <View
-                  className="bg-white rounded-lg flex-row items-center px-2"
-                  key={item?.id}>
-                  <Text className="text-black-100">{item?.title}</Text>
-                  <Image source={item?.image} className="w-4 h-4" resizeMode="contain" />
-                </View>
-              ))}
+              {/* {FeaturesData.map(item => ( */}
+              <View
+                className="bg-white rounded-lg flex-row items-center px-2"
+                key={item?.id}>
+                <Text className="text-black-100">{item?.title}</Text>
+                <Icon name="arrow-right" size={20} color="black" />
+              </View>
+              {/* ))} */}
             </View>
           </View>
         </View>

@@ -20,7 +20,6 @@ type CustomSearchProps = {
 };
 
 type ScreenNavigationProps = StackNavigationProp<RootStackParamList, 'Search'>;
-type ScreenRouteProps = RouteProp<RootStackParamList, 'Search'>;
 
 type RootStackParamList = {
   Search: { query: string } | undefined;
@@ -29,7 +28,7 @@ const CustomSearch = ({ placeholder, initialQuery, } : CustomSearchProps) => {
   const navigation = useNavigation<ScreenNavigationProps>();
   const [query, setQuery] = useState(initialQuery || '');
   const handlePress = () => {
-    navigation.navigate('Search', { query });
+    navigation.navigate('SearchTab', { query });
     setQuery('');
   };
   const handleKeyDown = (event: any) => {

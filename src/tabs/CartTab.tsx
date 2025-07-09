@@ -11,6 +11,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { icons } from '../constants';
 import Icon from '@react-native-vector-icons/lucide';
+import Stars from '../components/Stars';
 
 type IProduct = {
   id: number;
@@ -24,7 +25,7 @@ type IProduct = {
 type ICartItem = {
   product: IProduct;
   quantity: number;
-  size: string;
+  // size: string;
 };
 
 const initialCart: ICartItem[] = [
@@ -36,11 +37,11 @@ const initialCart: ICartItem[] = [
       discounted_price: 7000,
       stock: 10,
       images: [
-        { image_url: 'https://via.placeholder.com/120x120', is_main: true },
+        { image_url: 'https://placehold.jp/150x150.png', is_main: true },
       ],
     },
     quantity: 1,
-    size: '42',
+    // size: '42',
   },
 ];
 
@@ -74,16 +75,17 @@ const CartScreen = () => {
 
         <View className="flex flex-row justify-between items-center">
           <TouchableOpacity onPress={GoBack}>
-            <Icon name="arrow-left" size={24} color="black" />
+            <Icon name="arrow-left" size={24} color="#f87171" />
           </TouchableOpacity>
 
-          <Text className="text-xl font-semibold text-black">Shopping Bag</Text>
-          
+          <Text className="text-xl font-semibold text-red-400">Shopping Bag</Text>
+
           {/* redirect to order screen */}
           <TouchableOpacity
-            // onPress={() => navigation.navigate('Order')}
+
+          // onPress={() => navigation.navigate('Order')}
           >
-            <Icon name="shopping-basket" size={24} color="black" />
+            <Icon name="shopping-basket" size={24} color="#f87171" />
           </TouchableOpacity>
 
         </View>
@@ -96,32 +98,58 @@ const CartScreen = () => {
               className="flex-row py-4 border-b border-gray-200"
             >
               <Image
-                source={{ uri: mainImage }}
+                source={{ uri: 'https://placehold.jp/150x150.png' }}
                 className="w-24 h-24 rounded-md"
                 resizeMode="cover"
               />
               <View className="ml-4 flex-1 justify-between">
                 <View>
-                  <Text className="font-semibold text-base text-black">
-                    {item.product.product_name}
-                  </Text>
-                  <Text className="text-sm text-gray-600 mt-1">
-                    Checked Single-Breasted Blazer
-                  </Text>
-                  <View className="flex-row mt-2">
-                    <Text className="text-sm text-gray-800 mr-4">
-                      Size {item.size}
+                  <View className="flex-row items-center justify-between">
+                    <Text className="font-semibold text-base text-black">
+                      {item.product.product_name}
                     </Text>
-                    <Text className="text-sm text-gray-800">Qty {item.quantity}</Text>
+                    <RemoveItem id={item.product.id}></RemoveItem>
                   </View>
                   <Text className="text-sm text-gray-600 mt-1">
-                    Delivery by <Text className="font-medium">10 May 20XX</Text>
+                    {/* {item.product.description} */}
+                    Checked Single-Breasted Blazer
                   </Text>
+                  <Stars stars={5} numberOfReview={5} />
+                  <View className="flex-row mt-2">
+                    <Text className="text-sm text-gray-800">Quantity: {item.quantity}</Text>
+                  </View>
+
                 </View>
-                <View className="flex-row items-center mt-2">
-                  <Text className="text-lg font-bold text-black">
-                    ₹{item.product.discounted_price || item.product.price}
-                  </Text>
+
+                <View className="flex-row items-center justify-between">
+                  <View className="flex-row items-center mt-2 gap-x-2">
+                    <Text className="text-lg font-bold text-black">
+                      ${item.product.discounted_price || item.product.price}
+                    </Text>
+
+                    <Text className="text-sm font-semibold text-gray-500 line-through">
+                      ${item.product.price || ""}
+                    </Text>
+
+                  </View>
+                  {/* + quantity - */}
+                  <View className="flex-row items-center space-x-2">
+                    <TouchableOpacity
+                      onPress={() => handleQuantityChange(index, 'dec')}
+                      className="w-8 h-8 mr-2 bg-gray-200 rounded-full justify-center items-center"
+                    >
+                      <Text className="text-lg font-bold">-</Text>
+                    </TouchableOpacity>
+
+                    <Text className="text-base font-semibold ">{item.quantity}</Text>
+
+                    <TouchableOpacity
+                      onPress={() => handleQuantityChange(index, 'inc')}
+                      className="w-8 h-8 ml-2 bg-gray-200 rounded-full justify-center items-center"
+                    >
+                      <Text className="text-lg font-bold">+</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             </View>
@@ -130,54 +158,60 @@ const CartScreen = () => {
 
         {/* Order Summary */}
         <View className="pt-5">
-          <Text className="text-base font-semibold text-black mb-3">
-            Order Payment Details
-          </Text>
 
-          <View className="flex-row justify-between mb-2">
-            <Text className="text-gray-700">Order Amounts</Text>
-            <Text className="text-black font-medium">₹{totalPrice.toLocaleString()}</Text>
-          </View>
-
-          <View className="flex-row justify-between mb-2">
-            <Text className="text-gray-700">Convenience</Text>
-            <Text className="text-red-500">Apply Coupon</Text>
-          </View>
-
-          <View className="flex-row justify-between mb-2">
-            <Text className="text-gray-700">Delivery Fee</Text>
-            <Text className="text-green-600 font-medium">Free</Text>
-          </View>
-
-          <View className="border-t border-gray-200 my-3" />
 
           <View className="flex-row justify-between mb-1">
             <Text className="text-black font-semibold">Order Total</Text>
             <Text className="text-black font-bold text-lg">
-              ₹{totalPrice.toLocaleString()}
+              ${totalPrice.toLocaleString()}
             </Text>
           </View>
 
-          <Text className="text-blue-500 text-sm mb-4">EMI Available</Text>
+          {/* <Text className="text-blue-500 text-sm mb-4">VAT </Text> */}
         </View>
       </ScrollView>
 
       {/* Bottom Bar */}
-      <View className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-5 py-3 flex-row justify-between items-center">
+      <View className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-5 py-5 flex-row justify-between items-center">
         <View>
-          <Text className="text-sm text-gray-500">Total</Text>
-          <Text className="text-lg font-bold text-black">
-            ₹{totalPrice.toLocaleString()}
+          <Text className="text-md text-gray-500">Total</Text>
+          <Text className="text-xl font-bold text-red-400">
+            ${totalPrice.toLocaleString()}
           </Text>
         </View>
         <TouchableOpacity
-          className="bg-red-500 px-6 py-3 rounded-full"
+          className="bg-red-500 px-6 py-3 rounded-xl"
           onPress={() => navigation.navigate('Payment' as never)}
         >
-          <Text className="text-white font-medium text-base">Proceed to Payment</Text>
+          <Text className="text-white font-semibold text-lg">Proceed to Payment</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
+  );
+};
+
+const RemoveItem = ({ id }: { id: number }) => {
+  const [isRemove, setIsRemove] = useState(false);
+  return (
+    <View>
+      {!isRemove ? (
+        <TouchableOpacity onPress={() => setIsRemove(true)}>
+          <Icon name="trash" size={20} color="#f87171" />
+        </TouchableOpacity>
+      ) : (
+        <View >
+          <Text className='my-2'>Are you sure?</Text>
+          <View className="flex-row items-center justify-between">
+            <TouchableOpacity onPress={() => setIsRemove(false)}>
+              <Icon name="circle-check" size={32} color="#f87171" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setIsRemove(false)}>
+              <Icon name="circle-x" size={32} color="#f87171" />
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+    </View>
   );
 };
 

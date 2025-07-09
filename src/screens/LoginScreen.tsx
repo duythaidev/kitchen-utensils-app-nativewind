@@ -82,7 +82,7 @@ const LoginScreen = () => {
   return (
     <View className="flex-1 bg-white px-5 pt-5">
       <Text className="text-4xl font-bold mb-6">Welcome Back!</Text>
-      <Button title="Login" onPress={() => navigation.navigate('Home')} />
+      <Button title="Login" onPress={() => navigation.navigate('App')} />
       <FormInput
         prefixIcon={<Icon name={'mail'} size={24} color="#aaa" />}
         placeholder="Email"
