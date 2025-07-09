@@ -5,11 +5,13 @@ import {
   Image,
   TextInput,
   Alert,
+  NativeSyntheticEvent,
+  TextInputKeyPressEventData,
 } from 'react-native';
-import React, {useState} from 'react';
-import {icons} from '../constants';
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
+import React, { useState } from 'react';
+import { icons } from '../constants';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import Icon from '@react-native-vector-icons/lucide';
 
 type CustomSearchProps = {
@@ -21,29 +23,26 @@ type ScreenNavigationProps = StackNavigationProp<RootStackParamList, 'Search'>;
 type ScreenRouteProps = RouteProp<RootStackParamList, 'Search'>;
 
 type RootStackParamList = {
-  Search: {query: string} | undefined;
+  Search: { query: string } | undefined;
 };
-const CustomSearch: React.FC<CustomSearchProps> = ({ placeholder, initialQuery, }) => {
+const CustomSearch = ({ placeholder, initialQuery, } : CustomSearchProps) => {
   const navigation = useNavigation<ScreenNavigationProps>();
   const [query, setQuery] = useState(initialQuery || '');
   const handlePress = () => {
-    // if (query === '') {
-    //   return Alert.alert('Please fill the required field');
-    // } else {
-      navigation.navigate('Search', {query});
-      setQuery('');
-    // }
+    navigation.navigate('Search', { query });
+    setQuery('');
+  };
+  const handleKeyDown = (event: any) => {
+    if (event.nativeEvent.key === 'Enter') {
+      handlePress();
+    }
   };
 
   return (
     <View className="mx-3">
       <View className="flex flex-row items-center justify-between bg-white w-full rounded-xl pr-5  h-16">
         <TouchableOpacity onPress={handlePress}>
-          <Image
-            source={icons.search}
-            className="w-6 h-6 mx-4"
-            resizeMode="contain"
-          />
+          <Icon name="search" size={24} style={{ marginLeft: 10 }} color="#f87171" />
         </TouchableOpacity>
         <TextInput
           placeholder={placeholder || 'Search any Product..'}
@@ -52,9 +51,10 @@ const CustomSearch: React.FC<CustomSearchProps> = ({ placeholder, initialQuery, 
           className="text-[#BBBBBB] flex-1 text-lg font-pregular bg-white"
           placeholderTextColor={'#BBBBBB'}
           onSubmitEditing={handlePress}
+          onKeyPress={handleKeyDown}
         />
         <TouchableOpacity onPress={handlePress}>
-          <Icon name="arrow-right" size={24} color="#000" />
+          <Icon name="arrow-right" size={24} color="#f87171" />
         </TouchableOpacity>
         {/* <Image source={icons.mic} className=   "w-8 h-8" resizeMode="contain" /> */}
       </View>

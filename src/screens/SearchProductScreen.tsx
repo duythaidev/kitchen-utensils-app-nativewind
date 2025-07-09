@@ -14,6 +14,7 @@ import { IProduct } from '../types';
 import { icons } from '../constants';
 import { useNavigation } from '@react-navigation/native';
 import Icon from '@react-native-vector-icons/lucide';
+import CustomSearch from '../components/CustomSearch';
 
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = (width - 48) / 2; // margin 16 + 16 + 8 spacing
@@ -45,7 +46,7 @@ const SearchProductScreen = () => {
   );
 
   const renderItem = ({ item }: { item: IProduct }) => {
-    const mainImage = item.images?.find(img => img.is_main)?.image_url || '';
+    const mainImage = item.images?.find(img => img.is_main)?.image_url || 'https://placehold.jp/150x150.png';
     const price = item.discounted_price || item.price;
     const priceOff =
       item.discounted_price
@@ -53,68 +54,71 @@ const SearchProductScreen = () => {
         : 0;
 
     return (
-      <View
-        className="bg-white p-3 rounded-xl mb-4"
-        style={{ width: ITEM_WIDTH, elevation: 2 }}
-      >
-        <Image
-          source={{ uri: mainImage }}
-          style={{ width: '100%', height: 120, borderRadius: 12 }}
-          resizeMode="cover"
-        />
-        <Text className="mt-2 font-semibold text-base text-black" numberOfLines={1}>
-          {item.product_name}
-        </Text>
-        <Text className="text-sm text-gray-500" numberOfLines={2}>
-          {item.description}
-        </Text>
-        <View className="flex flex-row items-center mt-1">
-          <Text className="text-base font-bold text-orange-600">₹{price}</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', { productId: item.id })}>
+        <View
+          className=" p-3 rounded-xl mb-4 bg-white"
+          style={{ width: ITEM_WIDTH, elevation: 2 }}
+        >
+        
+          <Image
+            source={{ uri: mainImage || 'https://placehold.jp/150x150.png' }}
+            style={{ width: '100%', height: 120, borderRadius: 12 }}
+            resizeMode="cover"
+          />
+          <Text className="mt-2 font-semibold text-base text-black" numberOfLines={1}>
+            {item.product_name}
+          </Text>
+          <Text className="text-sm text-gray-500" numberOfLines={2}>
+            {item.description}
+          </Text>
+          <View className="flex flex-row items-center mt-1">
+            <Text className="text-base font-bold text-orange-600">₹{price}</Text>
+            {item.discounted_price && (
+              <Text className="ml-2 text-sm line-through text-gray-400">₹{item.price}</Text>
+            )}
+          </View>
           {item.discounted_price && (
-            <Text className="ml-2 text-sm line-through text-gray-400">₹{item.price}</Text>
+            <Text className="text-xs font-medium text-green-500">{priceOff}% OFF</Text>
           )}
-        </View>
-        {item.discounted_price && (
-          <Text className="text-xs font-medium text-green-500">{priceOff}% OFF</Text>
-        )}
-        <View className="flex flex-row items-center mt-1">
-          <View className="relative flex-row">
-            {/* Gray stars */}
-            {Array.from({ length: 5 }).map((_, index) => (
-              <Icon
-                key={`gray-${index}`}
-                name="star"
-                size={14}
-                color="#ccc"
-              />
-            ))}
-            {/* Yellow overlay */}
-            <View
-              style={{
-                flexDirection: 'row',
-                position: 'absolute',
-                overflow: 'hidden',
-                width: `${(item.stars || 0) * 20}%`, // 5 stars = 100%
-              }}
-              pointerEvents="none"
-            >
+          <View className="flex flex-row items-center mt-1">
+            <View className="relative flex-row">
+              {/* Gray stars */}
               {Array.from({ length: 5 }).map((_, index) => (
-                <Image
-                  key={`yellow-${index}`}
-                  source={icons.star}
-                  style={{ width: 14, height: 14, tintColor: '#facc15' }}
+                <Icon
+                  key={`gray-${index}`}
+                  name="star"
+                  size={14}
+                  color="#ccc"
                 />
               ))}
+              {/* Yellow overlay */}
+              <View
+                style={{
+                  flexDirection: 'row',
+                  position: 'absolute',
+                  overflow: 'hidden',
+                  width: `${(item.stars || 0) * 20}%`, // 5 stars = 100%
+                }}
+                pointerEvents="none"
+              >
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <Image
+                    key={`yellow-${index}`}
+                    source={icons.star}
+                    style={{ width: 14, height: 14, tintColor: '#facc15' }}
+                  />
+                ))}
+              </View>
             </View>
+            <Text className="ml-1 text-xs text-gray-600">({item.numberOfReview || 0})</Text>
           </View>
-          <Text className="ml-1 text-xs text-gray-600">({item.numberOfReview || 0})</Text>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
   return (
-    <View className="flex-1 bg-white px-4 pt-5">
+    <View className="flex-1 bg-gray-100 px-4 pt-5">
       {/* Header */}
       <View className="flex-row items-center justify-between mb-4">
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -125,7 +129,7 @@ const SearchProductScreen = () => {
       </View>
 
       {/* Search Input */}
-      <View className="bg-gray-100 flex-row items-center px-3 py-2 rounded-full mb-4">
+      <View className="bg-white flex-row items-center px-3 py-2 rounded-xl mb-4">
         <Image source={icons.search} className="w-5 h-5 mr-2" />
         <TextInput
           placeholder="Search any product..."
