@@ -144,7 +144,7 @@ const SettingTab = () => {
           )}
           <TouchableOpacity
             onPress={handleEditPic}
-            className="p-2 border-white border rounded-full bg-blue-500 absolute bottom-3 right-[31%] items-center justify-center"
+            className="p-2 border-white border rounded-full bg-primary absolute bottom-3 right-[31%] items-center justify-center"
           >
             <Image source={icons.pen} className="w-6 h-6" />
           </TouchableOpacity>

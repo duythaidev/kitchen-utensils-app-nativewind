@@ -62,7 +62,7 @@ const ForgotPasswordScreen = () => {
 
       <TouchableOpacity
         onPress={handleForgotPassword}
-        className="bg-blue-500 py-4 rounded-lg mt-2"
+        className="bg-primary py-4 rounded-lg mt-2"
         disabled={isSubmitting}
       >
         {isSubmitting ? (
@@ -77,7 +77,7 @@ const ForgotPasswordScreen = () => {
       <View className="flex flex-row justify-center items-center mt-8 gap-x-2">
         <Text className="text-[#575757] text-lg">Remember your password?</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-          <Text className="text-lg font-bold underline text-blue-500">
+          <Text className="text-lg font-bold underline text-primary">
             Login
           </Text>
         </TouchableOpacity>

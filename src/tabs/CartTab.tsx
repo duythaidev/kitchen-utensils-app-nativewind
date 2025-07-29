@@ -62,7 +62,7 @@ const CartScreen = () => {
     });
   };
 
-  const totalPrice = cartItems.reduce((total, item) => {
+  const totalPrice = cartItems?.reduce((total, item) => {
     const price = item.product.discounted_price || item.product.price;
     return total + price * item.quantity;
   }, 0);
@@ -167,7 +167,7 @@ const CartScreen = () => {
             </Text>
           </View>
 
-          {/* <Text className="text-blue-500 text-sm mb-4">VAT </Text> */}
+          {/* <Text className="text-primary text-sm mb-4">VAT </Text> */}
         </View>
       </ScrollView>
 

@@ -120,7 +120,7 @@ const SignupScreen = () => {
 
       <TouchableOpacity
         onPress={handleSignup}
-        className="bg-blue-500 py-4 rounded-lg"
+        className="bg-primary py-4 rounded-lg"
         disabled={isSubmitting}
       >
         {isSubmitting ? (
@@ -141,7 +141,7 @@ const SignupScreen = () => {
           <TouchableOpacity
             key={item.id}
             onPress={() => { }}
-            className="rounded-full border-2 bg-blue-50 border-blue-500 p-4"
+            className="rounded-full border-2 bg-blue-50 border-primary p-4"
           >
             <Image source={item.image} className="w-8 h-8" />
           </TouchableOpacity>
@@ -151,7 +151,7 @@ const SignupScreen = () => {
       <View className="flex flex-row justify-center items-center mt-8 gap-x-2">
         <Text className="text-[#575757] text-lg">Already have an account?</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-          <Text className="text-lg font-bold underline text-blue-500">
+          <Text className="text-lg font-bold underline text-primary">
             Login
           </Text>
         </TouchableOpacity>

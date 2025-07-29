@@ -113,7 +113,7 @@ const FormField: React.FC<FormFieldProps> = ({
       {/* display the error here if there... */}
       {error && (
         <Animated.View
-          className={` text-blue-500 font-pregular text-sm mt-3 self-center `}>
+          className={` text-primary font-pregular text-sm mt-3 self-center `}>
           {error}
         </Animated.View>
       )}

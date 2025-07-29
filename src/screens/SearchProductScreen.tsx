@@ -46,7 +46,7 @@ const SearchProductScreen = () => {
       setProducts(res.data.data);
       // console.log('products', res.data.data);
     } catch (error) {
-      console.error('Fetch products error:', error);
+      console.log('Fetch products error:', error);
     } finally {
       setLoading(false);
     }
@@ -57,7 +57,7 @@ const SearchProductScreen = () => {
       const res = await axios.get('http://10.0.2.2:8080/api/v1/categories');
       setCategories(res.data.data);
     } catch (err) {
-      console.error('Fetch categories error:', err);
+      console.log('Fetch categories error:', err);
     }
   };
 
@@ -72,7 +72,7 @@ const SearchProductScreen = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, [keyword, selectedCategory, priceSort ]);
+  }, [keyword, selectedCategory, priceSort]);
 
   // console.log('selectedCategory', selectedCategory, priceSort);
 
@@ -212,7 +212,7 @@ const SearchProductScreen = () => {
             onValueChange={val => setSelectedCategory(val)}
           >
             <Picker.Item label="All categories" value="" />
-            {categories.map(cat => (
+            {categories?.map(cat => (
               <Picker.Item key={cat.id} label={cat.category_name} value={cat.id} />
             ))}
           </Picker>

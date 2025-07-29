@@ -6,12 +6,12 @@ import {
   FlatList,
   ScrollView,
 } from 'react-native';
-import React, {useState} from 'react';
-import {icons} from '../constants';
-import {CustomButton, CustomWrapper, DetailsItem} from '../components';
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RouteStackParamList} from '../../App';
+import React, { useState } from 'react';
+import { icons } from '../constants';
+import { CustomButton, CustomWrapper, DetailsItem } from '../components';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteStackParamList } from '../../App';
 
 type Props = {};
 
@@ -19,12 +19,12 @@ const SettingTab = (props: Props) => {
   const navigation = useNavigation<StackNavigationProp<RouteStackParamList>>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleLogin = () => {};
-  const handleSignInWithProvider = () => {};
+  const handleLogin = () => { };
+  const handleSignInWithProvider = () => { };
   const handleNavigateToSignUp = () => {
     navigation.navigate('Signup');
   };
-  const handleEditPic = () => {};
+  const handleEditPic = () => { };
   return (
     <CustomWrapper>
       <View className="pt-2 px-3">
@@ -33,7 +33,7 @@ const SettingTab = (props: Props) => {
           <Image source={icons.profile} className="w-40 h-40 rounded-full " />
           <TouchableOpacity
             onPress={handleEditPic}
-            className=" p-2 border-white border rounded-full  bg-blue-500 absolute bottom-3 right-[31%] items-center justify-center">
+            className=" p-2 border-white border rounded-full  bg-primary absolute bottom-3 right-[31%] items-center justify-center">
             <Image source={icons.pen} className=" w-6 h-6" />
           </TouchableOpacity>
         </View>
@@ -44,7 +44,7 @@ const SettingTab = (props: Props) => {
           </Text>
           <FlatList
             data={personalDetailsData}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <DetailsItem title={item.title} placeholder={item.placeholder} />
             )}
             keyExtractor={item => item.id.toString()} // have to be in string format
@@ -58,7 +58,7 @@ const SettingTab = (props: Props) => {
           </Text>
           <FlatList
             data={businessData}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <DetailsItem title={item.title} placeholder={item.placeholder} />
             )}
             keyExtractor={item => item.id.toString()} // have to be in string format
@@ -72,7 +72,7 @@ const SettingTab = (props: Props) => {
           </Text>
           <FlatList
             data={bankData}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <DetailsItem title={item.title} placeholder={item.placeholder} />
             )}
             keyExtractor={item => item.id.toString()} // have to be in string format

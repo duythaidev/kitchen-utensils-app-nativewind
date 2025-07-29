@@ -70,7 +70,7 @@ const ProductsDetailsScreen = ({ route }: ProductDetailsProps) => {
           {/* {sizeData.map(item => (
             <View
               key={item?.id}
-              className="bg-transparent py-1 px-2 rounded-lg border border-blue-500">
+              className="bg-transparent py-1 px-2 rounded-lg border border-primary">
               <Text className="text-action text-xl font-medium">{item?.size} UK</Text>
             </View>
           ))} */}

@@ -89,7 +89,7 @@ const LoginScreen = () => {
         value={email}
         setValue={setEmail}
       />
-      
+
 
       <FormInput
         prefixIcon={<Icon name={'lock'} size={24} color="#aaa" />}
@@ -108,7 +108,7 @@ const LoginScreen = () => {
 
       <TouchableOpacity
         onPress={handleLogin}
-        className="bg-blue-500 py-4 rounded-lg"
+        className="bg-primary py-4 rounded-lg"
         disabled={isSubmitting}
       >
         {isSubmitting ? (
@@ -129,7 +129,7 @@ const LoginScreen = () => {
           <TouchableOpacity
             key={item.id}
             onPress={() => { }}
-            className="rounded-full border-2 bg-blue-50 border-blue-500 p-4"
+            className="rounded-full border-2 bg-blue-50 border-primary p-4"
           >
             <Image source={item.image} className="w-8 h-8" />
           </TouchableOpacity>
@@ -139,7 +139,7 @@ const LoginScreen = () => {
       <View className="flex flex-row justify-center items-center mt-8 gap-x-2">
         <Text className="text-[#575757] text-lg">Create An Account</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-          <Text className="text-lg font-bold underline text-blue-500">
+          <Text className="text-lg font-bold underline text-primary">
             Sign Up
           </Text>
         </TouchableOpacity>
